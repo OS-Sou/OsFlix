@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: osflix-web
+    restart: always
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - DB_HOST=localhost
+      - DB_DATABASE=sql_osflix_facil
+      - DB_USERNAME=sql_osflix_facil
+      - DB_PASSWORD=7efed3c4c0c1c
+    networks:
+      - osflix-network
+
+volumes:
+  db_data:
+
+networks:
+  osflix-network:
+    driver: bridge
