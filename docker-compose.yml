@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   web:
@@ -10,10 +10,29 @@ services:
     volumes:
       - ./src:/var/www/html
     environment:
-      - DB_HOST=localhost
+      - DB_HOST=db
       - DB_DATABASE=sql_osflix_facil
       - DB_USERNAME=sql_osflix_facil
       - DB_PASSWORD=7efed3c4c0c1c
+    networks:
+      - osflix-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osflix.rule=Host(`osflix.seudominio.com`)
+      - traefik.http.routers.osflix.entrypoints=websecure
+      - traefik.http.routers.osflix.tls.certresolver=letsencrypt
+
+  db:
+    image: mysql:8.0
+    container_name: osflix-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: sql_osflix_facil
+      MYSQL_USER: sql_osflix_facil
+      MYSQL_PASSWORD: 7efed3c4c0c1c
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
     networks:
       - osflix-network
 
